@@ -2,23 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Viewport responsivo real para una adaptación perfecta en cualquier dispositivo -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Pedidify - Menú Digital y Pedidos por WhatsApp</title>
     
     <!-- Fuentes e Íconos -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
-            --bg-main: #ffffff;
-            --surface: #f9fafb;
-            --border: #e5e7eb;
-            --text-dark: #111827;
-            --text-muted: #4b5563;
+            --bg-main: #09090b;
+            --bg-card: #121216;
+            --bg-card-hover: #1a1a20;
+            --border: #27272a;
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
             --primary-green: #25d366;
-            --primary-dark: #000000;
-            --accent-hover: #1eb857;
+            --primary-green-hover: #1eb857;
+            --green-glow: rgba(37, 211, 102, 0.15);
             --radius: 16px;
         }
 
@@ -32,18 +34,59 @@
 
         body {
             background-color: var(--bg-main);
-            color: var(--text-dark);
+            color: var(--text-white);
             line-height: 1.6;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ANIMACIONES */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes floatPhone {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        @keyframes floatCardTilted {
+            0% { transform: translate(0px, 0px) rotate(-12deg); }
+            50% { transform: translate(-4px, 4px) rotate(-10deg); }
+            100% { transform: translate(0px, 0px) rotate(-12deg); }
+        }
+
+        @keyframes blinkCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .typewriter-cursor {
+            display: inline-block;
+            background-color: var(--primary-green);
+            width: 3px;
+            height: 1em;
+            margin-left: 2px;
+            vertical-align: middle;
+            animation: blinkCursor 0.7s infinite;
+        }
+
+        .animate-fade-in {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         /* NAVEGACIÓN */
         nav {
-            background: var(--bg-main);
+            background: rgba(9, 9, 11, 0.9);
+            backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
-            padding: 16px 32px;
+            padding: 16px 20px;
             position: sticky;
             top: 0;
             z-index: 100;
+            width: 100%;
         }
 
         .nav-container {
@@ -55,247 +98,548 @@
         }
 
         .brand-logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--primary-dark);
-            display: flex;
+            font-size: 18px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            color: var(--text-white);
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
             text-decoration: none;
         }
 
-        .brand-logo span {
+        .brand-icon-box {
+            width: 28px;
+            height: 28px;
+            background: var(--primary-green);
+            color: #000000;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .brand-fy {
             color: var(--primary-green);
         }
 
-        .nav-btn {
-            padding: 10px 20px;
-            background: var(--primary-green);
-            color: #ffffff;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
+        .nav-links {
+            display: none; /* Oculto en móvil por diseño compacto, visible en PC */
+            gap: 24px;
+            list-style: none;
             font-size: 14px;
-            transition: background 0.2s ease;
+            color: var(--text-muted);
         }
 
-        .nav-btn:hover {
-            background: var(--accent-hover);
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
         }
 
-        /* HERO SECTION CON DEMO FLOTANTE */
+        .nav-links a:hover {
+            color: var(--text-white);
+        }
+
+        .btn-nav-get {
+            background: var(--primary-green);
+            color: #000;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 12px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .btn-nav-get:hover {
+            background: var(--primary-green-hover);
+        }
+
+        /* HERO SECTION (Diseño Móvil Primero) */
         .hero {
-            padding: 60px 24px;
+            padding: 40px 20px;
             max-width: 1200px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
+            display: flex;
+            flex-direction: column;
             gap: 40px;
             align-items: center;
+            text-align: center;
         }
 
         .badge-hero {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 16px;
-            background: #e6f9ed;
-            border: 1px solid #bdf2d0;
+            gap: 6px;
+            padding: 5px 12px;
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid rgba(37, 211, 102, 0.3);
             border-radius: 30px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             color: var(--primary-green);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .hero-text h1 {
-            font-size: 44px;
+            font-size: 28px;
             font-weight: 800;
-            line-height: 1.15;
-            color: var(--primary-dark);
-            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--text-white);
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
         }
 
         .hero-text p {
-            font-size: 18px;
+            font-size: 15px;
             color: var(--text-muted);
-            margin-bottom: 32px;
-        }
-
-        .price-tag {
-            font-size: 28px;
-            font-weight: 800;
-            color: var(--primary-dark);
             margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .hero-buttons {
             display: flex;
-            align-items: baseline;
-            gap: 8px;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
         }
 
-        .price-tag span {
-            font-size: 16px;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .hero-actions {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .btn-black {
-            padding: 14px 28px;
-            background: var(--primary-dark);
-            color: #ffffff;
-            border-radius: 10px;
-            text-decoration: none;
+        .btn-primary-green {
+            background: var(--primary-green);
+            color: #000000;
+            padding: 14px 20px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 16px;
+            font-size: 15px;
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
         }
 
-        .btn-black:hover {
-            opacity: 0.9;
+        .btn-primary-green:hover {
+            background: var(--primary-green-hover);
+            transform: translateY(-2px);
         }
 
-        /* MÓDULO MÓVIL FLOTANTE */
-        .preview-container {
+        .btn-outline {
+            background: transparent;
+            color: var(--text-white);
+            border: 1px solid var(--border);
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .btn-outline:hover {
+            border-color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .hero-visual {
+            position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+            width: 100%;
         }
 
-        .floating-phone {
-            width: 320px;
-            height: 620px;
-            background: var(--primary-dark);
-            border-radius: 36px;
-            padding: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            position: relative;
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-12px); }
-            100% { transform: translateY(0px); }
-        }
-
-        .phone-notch {
-            width: 100px;
-            height: 16px;
-            background: #1f2937;
-            border-radius: 0 0 10px 10px;
-            margin: 0 auto 10px auto;
+        .floating-phone-wrapper {
+            width: 100%;
+            max-width: 270px;
+            height: 520px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 30px var(--green-glow);
+            animation: floatPhone 6s ease-in-out infinite;
+            overflow: hidden;
         }
 
         .demo-iframe {
             width: 100%;
-            height: calc(100% - 26px);
+            height: 100%;
             border: none;
-            border-radius: 26px;
             background: #ffffff;
         }
 
-        /* CARACTERÍSTICAS (ESTILO WHATSORDER) */
-        .features {
-            background: var(--surface);
-            padding: 80px 24px;
+        /* MARCAS / SOCIOS */
+        .brands-section {
+            padding: 30px 20px;
             border-top: 1px solid var(--border);
             border-bottom: 1px solid var(--border);
-        }
-
-        .section-title {
+            background: rgba(18, 18, 22, 0.4);
             text-align: center;
-            max-width: 600px;
-            margin: 0 auto 48px auto;
         }
 
-        .section-title h2 {
-            font-size: 32px;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 12px;
-        }
-
-        .section-title p {
-            color: var(--text-muted);
-            font-size: 16px;
-        }
-
-        .features-grid {
+        .brands-container {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px 30px;
+            opacity: 0.7;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* SECCIÓN DE CARACTERÍSTICAS */
+        .features-showcase {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 650px;
+            margin: 0 auto 40px auto;
+        }
+
+        .section-header h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .showcase-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 32px;
+            grid-template-columns: 1fr;
+            gap: 20px;
         }
 
-        .feature-card {
-            background: var(--bg-main);
-            padding: 32px;
-            border-radius: var(--radius);
+        .showcase-card {
+            background: var(--bg-card);
             border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: border-color 0.3s;
         }
 
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: #e6f9ed;
+        .showcase-card:hover {
+            border-color: rgba(37, 211, 102, 0.4);
+        }
+
+        .feature-icon-box {
+            width: 44px;
+            height: 44px;
+            background: rgba(37, 211, 102, 0.1);
             color: var(--primary-green);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            margin-bottom: 20px;
+            font-size: 18px;
         }
 
-        .feature-card h3 {
+        .showcase-card h3 {
             font-size: 18px;
             font-weight: 700;
-            margin-bottom: 8px;
         }
 
-        .feature-card p {
+        .showcase-card p {
+            color: var(--text-muted);
             font-size: 14px;
+            line-height: 1.5;
+        }
+
+        /* SECCIÓN CENTRAL: TELÉFONO + TARJETA */
+        .dual-preview-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .dual-preview-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            min-height: 460px;
+        }
+
+        .floating-credit-card-tilted {
+            position: absolute;
+            top: 40px;
+            left: 5%;
+            width: 240px;
+            height: 150px;
+            background: linear-gradient(135deg, #1b1b26 0%, #0d0d12 100%);
+            border: 1.5px solid rgba(37, 211, 102, 0.6);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(37, 211, 102, 0.2);
+            transform: rotate(-12deg);
+            animation: floatCardTilted 6s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        .fcc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .fcc-chip {
+            width: 30px;
+            height: 22px;
+            background: linear-gradient(135deg, #25d366 0%, #0e4522 100%);
+            border-radius: 4px;
+        }
+
+        .fcc-number {
+            font-family: monospace;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--text-white);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .fcc-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10px;
             color: var(--text-muted);
         }
 
-        /* PASOS PARA LA PLANTILLA */
-        .steps-section {
-            padding: 80px 24px;
-            max-width: 800px;
+        .fcc-footer span b {
+            color: var(--text-white);
+            font-size: 11px;
+        }
+
+        .floating-phone-secondary {
+            position: relative;
+            width: 240px;
+            height: 440px;
+            background: var(--bg-card);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+            overflow: hidden;
+            z-index: 2;
+            left: 15px;
+        }
+
+        .dual-content {
+            text-align: center;
+        }
+
+        .dual-content h2 {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 14px;
+            letter-spacing: -0.5px;
+        }
+
+        .dual-content p {
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .feature-bullets {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            text-align: left;
+        }
+
+        .bullet-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .bullet-icon {
+            width: 34px;
+            height: 34px;
+            background: rgba(37, 211, 102, 0.1);
+            color: var(--primary-green);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .bullet-text h4 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .bullet-text p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* SECCIÓN DE SUSCRIPCIÓN */
+        .pricing-section {
+            padding: 60px 20px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
-        .steps-list {
+        .pricing-xora-wrapper {
+            max-width: 100%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .pricing-xora-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70%;
+            height: 80px;
+            background: rgba(37, 211, 102, 0.15);
+            filter: blur(40px);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .pricing-xora-card {
+            background: linear-gradient(180deg, #12121a 0%, #0c0c10 100%);
+            border: 1px solid rgba(37, 211, 102, 0.4);
+            border-radius: 24px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 1;
+        }
+
+        .pricing-icon-badge {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 16px auto;
+            background: radial-gradient(circle, rgba(37, 211, 102, 0.25) 0%, #121216 70%);
+            border: 1.5px solid rgba(37, 211, 102, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-size: 20px;
+        }
+
+        .pricing-plan-pill {
+            display: inline-block;
+            background: rgba(37, 211, 102, 0.12);
+            color: var(--primary-green);
+            font-size: 11px;
+            font-weight: 800;
+            padding: 5px 14px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(37, 211, 102, 0.2);
+        }
+
+        .pricing-amount-container {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 2px;
+            margin-bottom: 6px;
+        }
+
+        .pricing-currency-sign {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-green);
+        }
+
+        .pricing-number {
+            font-size: 54px;
+            font-weight: 900;
+            color: var(--text-white);
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+
+        .pricing-duration {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        .pricing-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        .pricing-features-divider {
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 24px;
+        }
+
+        .pricing-features-list-xora {
+            list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 24px;
-            margin-top: 40px;
+            gap: 14px;
+            text-align: left;
+            margin-bottom: 28px;
         }
 
-        .step-item {
+        .pricing-features-list-xora li {
             display: flex;
-            gap: 20px;
-            align-items: flex-start;
-            background: var(--surface);
-            padding: 24px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-white);
+            font-weight: 500;
         }
 
-        .step-number {
-            width: 36px;
-            height: 36px;
-            background: var(--primary-green);
-            color: #ffffff;
-            font-weight: 800;
+        .pricing-features-list-xora i {
+            color: var(--primary-green);
+            font-size: 14px;
+            background: rgba(37, 211, 102, 0.1);
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -303,103 +647,141 @@
             flex-shrink: 0;
         }
 
-        .step-content h4 {
-            font-size: 16px;
+        .pricing-footer-note {
+            margin-top: 14px;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        /* GENERADOR */
+        .generator-section {
+            padding: 40px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .steps-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .step-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: var(--radius);
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-green);
+            color: #000;
+            font-weight: 800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 14px;
+        }
+
+        .step-info h4 {
+            font-size: 15px;
             font-weight: 700;
             margin-bottom: 4px;
         }
 
-        .step-content p {
-            font-size: 14px;
+        .step-info p {
+            font-size: 13px;
             color: var(--text-muted);
+            line-height: 1.5;
         }
 
-        .step-btn {
+        .step-btn-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 12px;
-            padding: 10px 18px;
+            gap: 6px;
+            margin-top: 10px;
+            padding: 6px 12px;
             background: var(--primary-green);
-            color: #ffffff;
-            text-decoration: none;
+            color: #000;
             font-weight: 700;
-            font-size: 14px;
-            border-radius: 8px;
+            font-size: 12px;
+            border-radius: 6px;
+            text-decoration: none;
             transition: background 0.2s;
         }
 
-        .step-btn:hover {
-            background: var(--accent-hover);
+        .step-btn-link:hover {
+            background: var(--primary-green-hover);
         }
 
-        /* FORMULARIO DE GENERACIÓN DE MENÚ */
-        .generator-box {
-            background: var(--primary-dark);
-            color: #ffffff;
-            padding: 40px;
-            border-radius: var(--radius);
-            margin-top: 40px;
+        .generator-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
         }
 
-        .generator-box h3 {
-            font-size: 22px;
-            margin-bottom: 12px;
+        .generator-card h3 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 6px;
         }
 
-        .generator-box p {
-            color: #9ca3af;
-            font-size: 14px;
-            margin-bottom: 24px;
-        }
-
-        .input-group {
-            display: flex;
-            gap: 12px;
+        .generator-card p {
+            color: var(--text-muted);
+            font-size: 13px;
             margin-bottom: 20px;
         }
 
-        .input-field {
-            flex: 1;
-            padding: 14px 16px;
-            border-radius: 8px;
-            border: 1px solid #374151;
-            background: #1f2937;
-            color: #ffffff;
+        .input-group-custom {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-white);
             font-size: 14px;
             outline: none;
+            transition: border-color 0.2s;
         }
 
-        .btn-green {
-            padding: 14px 24px;
-            background: var(--primary-green);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-            white-space: nowrap;
+        .input-control:focus {
+            border-color: var(--primary-green);
         }
 
-        .btn-green:hover {
-            background: var(--accent-hover);
-        }
-
-        .result-box {
+        .result-box-custom {
             display: none;
-            background: #1f2937;
-            padding: 16px;
-            border-radius: 8px;
-            border: 1px solid #374151;
+            margin-top: 14px;
+            background: var(--bg-main);
+            border: 1px solid var(--border);
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 13px;
             word-break: break-all;
         }
 
-        .result-box.active {
+        .result-box-custom.active {
             display: block;
         }
 
-        .result-box a {
+        .result-box-custom a {
             color: var(--primary-green);
             font-weight: 700;
             text-decoration: none;
@@ -407,25 +789,169 @@
 
         footer {
             text-align: center;
-            padding: 40px 24px;
-            border-top: 1px solid var(--border);
-            font-size: 14px;
+            padding: 30px 20px;
+            font-size: 12px;
             color: var(--text-muted);
+            border-top: 1px solid var(--border);
+            background: var(--bg-card);
         }
 
-        @media (max-width: 900px) {
+        /* ========================================== */
+        /* MEDIA QUERIES PARA COMPUTADORAS / TABLETS (PC) */
+        /* ========================================== */
+        @media (min-width: 768px) {
+            nav {
+                padding: 18px 40px;
+            }
+
+            .brand-logo {
+                font-size: 20px;
+            }
+
+            .brand-icon-box {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .nav-links {
+                display: flex; /* Muestra el menú superior en PC */
+            }
+
+            .btn-nav-get {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
+
             .hero {
-                grid-template-columns: 1fr;
-                text-align: center;
+                padding: 80px 20px;
+                flex-direction: row;
+                text-align: left;
+                gap: 60px;
             }
-            .hero-actions {
-                justify-content: center;
+
+            .hero-text {
+                flex: 1.1;
             }
-            .price-tag {
-                justify-content: center;
+
+            .hero-visual {
+                flex: 0.9;
             }
-            .input-group {
-                flex-direction: column;
+
+            .badge-hero {
+                font-size: 13px;
+                padding: 6px 14px;
+            }
+
+            .hero-text h1 {
+                font-size: 44px;
+                min-height: 106px;
+            }
+
+            .hero-text p {
+                font-size: 17px;
+            }
+
+            .hero-buttons {
+                flex-direction: row;
+                width: auto;
+            }
+
+            .floating-phone-wrapper {
+                max-width: 310px;
+                height: 590px;
+            }
+
+            .brands-container {
+                gap: 30px 50px;
+                font-size: 15px;
+            }
+
+            .features-showcase {
+                padding: 80px 20px;
+            }
+
+            .section-header h2 {
+                font-size: 30px;
+            }
+
+            .section-header p {
+                font-size: 16px;
+            }
+
+            .showcase-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+            }
+
+            .showcase-card {
+                padding: 32px;
+            }
+
+            .dual-preview-section {
+                padding: 100px 20px;
+                flex-direction: row;
+                gap: 60px;
+            }
+
+            .dual-preview-visual {
+                flex: 1;
+                min-height: 520px;
+            }
+
+            .dual-content {
+                flex: 1.1;
+                text-align: left;
+            }
+
+            .floating-credit-card-tilted {
+                width: 285px;
+                height: 175px;
+                top: 60px;
+                left: -10px;
+                transform: rotate(-18deg);
+            }
+
+            .floating-phone-secondary {
+                width: 260px;
+                height: 480px;
+                left: 20px;
+            }
+
+            .feature-bullets {
+                text-align: left;
+            }
+
+            .pricing-section {
+                padding: 80px 20px;
+            }
+
+            .pricing-xora-wrapper {
+                max-width: 480px;
+            }
+
+            .pricing-xora-card {
+                padding: 40px 32px;
+            }
+
+            .generator-section {
+                padding: 60px 20px;
+            }
+
+            .steps-container {
+                gap: 20px;
+            }
+
+            .step-box {
+                padding: 24px;
+            }
+
+            .generator-card {
+                padding: 32px;
+            }
+
+            .input-group-custom {
+                flex-direction: row;
             }
         }
     </style>
@@ -436,133 +962,237 @@
     <nav>
         <div class="nav-container">
             <a href="#" class="brand-logo">
-                <i class="fa-solid fa-store"></i> Pedidify<span>.</span>
+                <div class="brand-icon-box"><i class="fa-solid fa-store"></i></div>
+                <span>Pedidi<span class="brand-fy">fy</span></span>
             </a>
-            <a href="#crear-tienda" class="nav-btn">Probar por $4/mes</a>
+            <ul class="nav-links">
+                <li><a href="#caracteristicas">Características</a></li>
+                <li><a href="#planes">Precios</a></li>
+                <li><a href="#crear-tienda">Crear Tienda</a></li>
+            </ul>
+            <a href="#crear-tienda" class="btn-nav-get">Empezar Gratis</a>
         </div>
     </nav>
 
     <!-- HERO SECTION -->
-    <section class="hero">
+    <section class="hero animate-fade-in">
         <div class="hero-text">
             <div class="badge-hero">
-                <i class="fa-brands fa-whatsapp"></i> 0% Comisiones • Sin Apps
+                <i class="fa-brands fa-whatsapp"></i> 0% Comisiones • Sin Apps que descargar
             </div>
-            <h1>Crea tu menú digital y recibe pedidos por WhatsApp</h1>
-            <p>Sincroniza tus productos y precios en tiempo real directo desde Google Sheets.</p>
             
-            <div class="price-tag">
-                $4.00 <span>/ mes (Acceso ilimitado)</span>
-            </div>
-
-            <div class="hero-actions">
-                <a href="#crear-tienda" class="btn-black">
-                    Crear mi tienda <i class="fa-solid fa-arrow-right"></i>
+            <h1 id="typewriter-title"><span class="typewriter-cursor"></span></h1>
+            
+            <p>Sincroniza tus productos, precios y categorías en tiempo real conectando una simple hoja de Google Sheets directo a tu WhatsApp.</p>
+            
+            <div class="hero-buttons">
+                <a href="#crear-tienda" class="btn-primary-green">
+                    Crear mi menú <i class="fa-solid fa-arrow-right"></i>
+                </a>
+                <a href="#planes" class="btn-outline">
+                    Ver Precios <i class="fa-solid fa-bolt"></i>
                 </a>
             </div>
         </div>
 
-        <!-- MÓDULO MÓVIL FLOTANTE CON TU PLANTILLA -->
-        <div class="preview-container">
-            <div class="floating-phone">
-                <div class="phone-notch"></div>
+        <div class="hero-visual">
+            <div class="floating-phone-wrapper">
                 <iframe class="demo-iframe" src="https://pedidify.vercel.app" title="Demo Interactiva Pedidify"></iframe>
             </div>
         </div>
     </section>
 
-    <!-- VENTAJAS / CARACTERÍSTICAS -->
-    <section class="features">
-        <div class="section-title">
-            <h2>¿Por qué elegir Pedidify?</h2>
-            <p>Diseñado para que negocios locales reciban pedidos directo al WhatsApp sin pagar comisiones por venta.</p>
+    <!-- MARCAS -->
+    <div class="brands-section">
+        <div class="brands-container">
+            <span><i class="fa-solid fa-utensils"></i> Restaurantes</span>
+            <span><i class="fa-solid fa-burger"></i> Dark Kitchens</span>
+            <span><i class="fa-solid fa-mug-hot"></i> Cafeterías</span>
+            <span><i class="fa-solid fa-store"></i> Comercios Locales</span>
+            <span><i class="fa-solid fa-bag-shopping"></i> Retail</span>
+        </div>
+    </div>
+
+    <!-- CARACTERÍSTICAS -->
+    <section class="features-showcase" id="caracteristicas">
+        <div class="section-header">
+            <h2>Gestiona todo desde la palma de tu mano</h2>
+            <p>Diseñado para ofrecer máxima velocidad, simplicidad y cero complicaciones técnicas para tu negocio.</p>
         </div>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-file-excel"></i></div>
-                <h3>Gestionado con Google Sheets</h3>
-                <p>No necesitas un panel de administración complejo. Cambia un precio en tu plantilla de Google y se actualiza al instante.</p>
+        <div class="showcase-grid">
+            <div class="showcase-card">
+                <div class="feature-icon-box"><i class="fa-solid fa-file-excel"></i></div>
+                <h3>Google Sheets Sync</h3>
+                <p>Olvídate de paneles complejos. Modifica un precio o nombre en tu hoja de Google y se actualizará automáticamente en tu tienda web.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-brands fa-whatsapp"></i></div>
-                <h3>Pedidos estructurados</h3>
-                <p>El cliente arma su carrito y te envía un mensaje formateado a WhatsApp con los items, datos de entrega y el total calculado.</p>
+            <div class="showcase-card">
+                <div class="feature-icon-box"><i class="fa-brands fa-whatsapp"></i></div>
+                <h3>Pedidos a WhatsApp</h3>
+                <p>Tus clientes arman su carrito de forma intuitiva y reciben un mensaje estructurado directo a tu chat con los productos y el total exacto.</p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon"><i class="fa-solid fa-bolt"></i></div>
-                <h3>Carga Ultra-Rápida</h3>
-                <p>Tus clientes no tienen que descargar ninguna aplicación. Abren el enlace desde su navegador y compran en 3 clics.</p>
+            <div class="showcase-card">
+                <div class="feature-icon-box"><i class="fa-solid fa-bolt"></i></div>
+                <h3>Cero Comisiones</h3>
+                <p>Conserva el 100% de tus ganancias. No cobramos tarifas ocultas por cada venta realizada a través de tu catálogo digital.</p>
             </div>
         </div>
     </section>
 
-    <!-- CÓMO OBTENER LA PLANTILLA (ESTILO WHATSORDER) -->
-    <section class="steps-section" id="crear-tienda">
-        <div class="section-title">
-            <h2>Crea tu página de Pedidify en 5 pasos</h2>
-            <p>Sigue las instrucciones para vincular tu plantilla y activar tu menú interactivo.</p>
+    <!-- SECCIÓN CENTRAL: TELÉFONO + TARJETA -->
+    <section class="dual-preview-section">
+        <div class="dual-preview-visual">
+            <div class="floating-credit-card-tilted">
+                <div class="fcc-top">
+                    <div class="fcc-chip"></div>
+                    <i class="fa-solid fa-wifi" style="color: var(--primary-green); font-size: 14px;"></i>
+                </div>
+                <div class="fcc-number">1234 5678 9101 2345</div>
+                <div class="fcc-footer">
+                    <span>TITULAR<br><b>PEDIDIFY PAY</b></span>
+                    <span style="color: var(--primary-green); font-weight: 800; font-size: 11px;">PRO</span>
+                </div>
+            </div>
+
+            <div class="floating-phone-secondary">
+                <iframe class="demo-iframe" src="https://pedidify.vercel.app" title="Demo Interactiva Pedidify 2"></iframe>
+            </div>
         </div>
 
-        <div class="steps-list">
-            <div class="step-item">
-                <div class="step-number">1</div>
-                <div class="step-content">
+        <div class="dual-content">
+            <h2>Control total del menú en tus manos</h2>
+            <p>Mantén tu catálogo al día sin esfuerzo técnico. Tus clientes disfrutan de una interfaz fluida mientras tú gestionas todo desde Google Drive.</p>
+            
+            <div class="feature-bullets">
+                <div class="bullet-item">
+                    <div class="bullet-icon"><i class="fa-solid fa-mobile-screen"></i></div>
+                    <div class="bullet-text">
+                        <h4>Diseño Mobile-First</h4>
+                        <p>Optimizado al 100% para que tus clientes compren desde sus teléfonos de forma cómoda y veloz.</p>
+                    </div>
+                </div>
+
+                <div class="bullet-item">
+                    <div class="bullet-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="bullet-text">
+                        <h4>Confiable y Estable</h4>
+                        <p>Infraestructura en la nube con alta disponibilidad garantizada para que tu menú nunca deje de vender.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN DE SUSCRIPCIÓN -->
+    <section class="pricing-section" id="planes">
+        <div class="section-header">
+            <h2>Inversión transparente y accesible</h2>
+            <p>Todo el poder de una plataforma profesional con una tarifa única y sin sorpresas.</p>
+        </div>
+
+        <div class="pricing-xora-wrapper">
+            <div class="pricing-xora-card">
+                <div class="pricing-icon-badge">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                
+                <span class="pricing-plan-pill">Plan Pro Ilimitado</span>
+                
+                <div class="pricing-amount-container">
+                    <span class="pricing-currency-sign">$</span>
+                    <span class="pricing-number">4</span>
+                    <span class="pricing-duration">/ mes</span>
+                </div>
+                
+                <p class="pricing-subtitle">Ideal para negocios que buscan automatizar sus pedidos por WhatsApp de forma profesional.</p>
+
+                <div class="pricing-features-divider"></div>
+
+                <ul class="pricing-features-list-xora">
+                    <li>
+                        <i class="fa-solid fa-check"></i>
+                        <span>Sincronización instantánea con Google Sheets</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-check"></i>
+                        <span>Enlace directo a WhatsApp con carrito ordenado</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-check"></i>
+                        <span>0% comisiones por cada venta realizada</span>
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-check"></i>
+                        <span>Infraestructura rápida y soporte prioritario</span>
+                    </li>
+                </ul>
+
+                <a href="#crear-tienda" class="btn-primary-green" style="width: 100%; justify-content: center;">
+                    Empezar ahora <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+                <div class="pricing-footer-note">- Oferta por tiempo limitado -</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GENERADOR -->
+    <section class="generator-section" id="crear-tienda">
+        <div class="section-header">
+            <h2>Crea tu página de Pedidify en minutos</h2>
+            <p>Sigue los pasos para vincular tu plantilla y activar tu menú interactivo al instante.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-box">
+                <div class="step-num">1</div>
+                <div class="step-info">
                     <h4>Haz una copia de la plantilla máster</h4>
-                    <p>Haz clic en el siguiente botón para guardar la plantilla directamente en tu cuenta de Google Drive.</p>
-                    <a href="https://docs.google.com/spreadsheets/d/1YvoTi4v3bVbvwJoGecaoIp8yf_PGQaJ6MZLUEB1QWss/copy" target="_blank" class="step-btn">
-                        <i class="fa-file-excel"></i> Copiar Plantilla Pedidify
+                    <p>Guarda la estructura de la base de datos directamente en tu cuenta de Google Drive personal.</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1YvoTi4v3bVbvwJoGecaoIp8yf_PGQaJ6MZLUEB1QWss/copy" target="_blank" class="step-btn-link">
+                        <i class="fa-solid fa-file-excel"></i> Copiar Plantilla
                     </a>
                 </div>
             </div>
 
-            <div class="step-item">
-                <div class="step-number">2</div>
-                <div class="step-content">
+            <div class="step-box">
+                <div class="step-num">2</div>
+                <div class="step-info">
                     <h4>Completa tu catálogo y datos</h4>
-                    <p>Ingresa el nombre de tu local, número de WhatsApp y agrega tus productos con precios e imágenes dentro de la hoja copiada.</p>
+                    <p>Ingresa el nombre de tu establecimiento, número de WhatsApp y añade tus productos con precios e imágenes.</p>
                 </div>
             </div>
 
-            <div class="step-item">
-                <div class="step-number">3</div>
-                <div class="step-content">
+            <div class="step-box">
+                <div class="step-num">3</div>
+                <div class="step-info">
                     <h4>Publica la hoja en la web</h4>
-                    <p>Dentro de tu hoja en Google Sheets, ve a <strong>Archivo > Compartir > Publicar en la web</strong> y presiona <strong>Publicar</strong>.</p>
+                    <p>En Google Sheets, ve a <strong>Archivo > Compartir > Publicar en la web</strong> y presiona Publicar.</p>
                 </div>
             </div>
 
-            <div class="step-item">
-                <div class="step-number">4</div>
-                <div class="step-content">
-                    <h4>Copia y pega el enlace aquí</h4>
-                    <p>Copia el enlace de tu Google Sheet (o el ID) y pégalo en el generador de abajo para obtener tu URL personalizada.</p>
-                </div>
-            </div>
-
-            <div class="step-item">
-                <div class="step-number">5</div>
-                <div class="step-content">
-                    <h4>Prueba tu menú y activa tu licencia</h4>
-                    <p>Abre la URL generada para revisar tu tienda. Cuando estés listo, suscríbete para mantener la toma de pedidos activa.</p>
+            <div class="step-box">
+                <div class="step-num">4</div>
+                <div class="step-info">
+                    <h4>Genera tu enlace y pruébalo</h4>
+                    <p>Pega tu enlace publicado en el generador de abajo y obtén tu tienda funcionando al instante.</p>
                 </div>
             </div>
         </div>
 
-        <!-- GENERADOR EN LA PÁGINA -->
-        <div class="generator-box">
-            <h3>Generar tienda de Pedidify</h3>
-            <p>Pega el enlace publicado o el ID de tu Google Sheet aquí:</p>
+        <div class="generator-card">
+            <h3>Generador de tienda Pedidify</h3>
+            <p>Pega el enlace público o ID de tu Google Sheet aquí:</p>
             
-            <div class="input-group">
-                <input type="text" id="sheetId" class="input-field" placeholder="Pega tu enlace de Google Sheet o ID aquí...">
-                <button class="btn-green" onclick="generarLink()">Obtener mi enlace</button>
+            <div class="input-group-custom">
+                <input type="text" id="sheetId" class="input-control" placeholder="Ej: https://docs.google.com/spreadsheets/d/...">
+                <button class="btn-primary-green" onclick="generarLink()" style="justify-content: center; cursor: pointer;">Obtener mi enlace</button>
             </div>
 
-            <div id="result" class="result-box">
-                <span>Tu tienda está lista en: </span><br>
+            <div id="result" class="result-box-custom">
+                <span style="color: var(--text-muted);">Tu tienda está lista en:</span><br>
                 <a id="storeUrl" href="#" target="_blank"></a>
             </div>
         </div>
@@ -573,6 +1203,30 @@
     </footer>
 
     <script>
+        const titleText = "Crea tu menú digital y recibe pedidos por WhatsApp";
+        const titleElement = document.getElementById("typewriter-title");
+
+        function typeWriterEffect(text, element, callback) {
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.innerHTML = text.substring(0, i + 1) + '<span class="typewriter-cursor"></span>';
+                    i++;
+                    setTimeout(typing, 35);
+                } else {
+                    element.innerHTML = text;
+                    if (callback) callback();
+                }
+            }
+            typing();
+        }
+
+        window.addEventListener("DOMContentLoaded", () => {
+            setTimeout(() => {
+                typeWriterEffect(titleText, titleElement);
+            }, 300);
+        });
+
         function generarLink() {
             const rawInput = document.getElementById('sheetId').value.trim();
             if(!rawInput) {
@@ -581,8 +1235,6 @@
             }
 
             let sheetId = rawInput;
-
-            // Extraer ID si el usuario pega la URL completa de Google Sheet
             const matches = rawInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
             if (matches && matches[1]) {
                 sheetId = matches[1];
