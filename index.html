@@ -314,6 +314,25 @@
             color: var(--text-muted);
         }
 
+        .step-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding: 10px 18px;
+            background: var(--primary-green);
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .step-btn:hover {
+            background: var(--accent-hover);
+        }
+
         /* FORMULARIO DE GENERACIÓN DE MENÚ */
         .generator-box {
             background: var(--primary-dark);
@@ -419,7 +438,7 @@
             <a href="#" class="brand-logo">
                 <i class="fa-solid fa-store"></i> Pedidify<span>.</span>
             </a>
-            <a href="#suscribirse" class="nav-btn">Probar por $4/mes</a>
+            <a href="#crear-tienda" class="nav-btn">Probar por $4/mes</a>
         </div>
     </nav>
 
@@ -429,15 +448,15 @@
             <div class="badge-hero">
                 <i class="fa-brands fa-whatsapp"></i> 0% Comisiones • Sin Apps
             </div>
-            <h1>Recibe pedidos por WhatsApp fácilmente</h1>
-            <p>Convierte tu catálogo o menú en una tienda interactiva. Modifica precios y productos desde Google Sheets en tiempo real.</p>
+            <h1>Crea tu menú digital y recibe pedidos por WhatsApp</h1>
+            <p>Sincroniza tus productos y precios en tiempo real directo desde Google Sheets.</p>
             
             <div class="price-tag">
                 $4.00 <span>/ mes (Acceso ilimitado)</span>
             </div>
 
             <div class="hero-actions">
-                <a href="#suscribirse" class="btn-black">
+                <a href="#crear-tienda" class="btn-black">
                     Crear mi tienda <i class="fa-solid fa-arrow-right"></i>
                 </a>
             </div>
@@ -480,59 +499,70 @@
         </div>
     </section>
 
-    <!-- CÓMO OBTENER LA PLANTILLA -->
-    <section class="steps-section" id="suscribirse">
+    <!-- CÓMO OBTENER LA PLANTILLA (ESTILO WHATSORDER) -->
+    <section class="steps-section" id="crear-tienda">
         <div class="section-title">
-            <h2>¿Cómo obtienen los clientes su tienda?</h2>
-            <p>Así funciona el proceso de suscripción e integración de la plantilla.</p>
+            <h2>Crea tu página de Pedidify en 5 pasos</h2>
+            <p>Sigue las instrucciones para vincular tu plantilla y activar tu menú interactivo.</p>
         </div>
 
         <div class="steps-list">
             <div class="step-item">
                 <div class="step-number">1</div>
                 <div class="step-content">
-                    <h4>Suscripción ($4 USD / mes)</h4>
-                    <p>El cliente realiza el pago mensual para activar su cuenta y recibir acceso al sistema.</p>
+                    <h4>Haz una copia de la plantilla máster</h4>
+                    <p>Haz clic en el siguiente botón para guardar la plantilla directamente en tu cuenta de Google Drive.</p>
+                    <a href="https://docs.google.com/spreadsheets/d/1s0NNdbEaRp4Z9nWSFaacIeCXW1LYzBdQzSUVx9___H0/copy" target="_blank" class="step-btn">
+                        <i class="fa-file-excel"></i> Copiar Plantilla Pedidify
+                    </a>
                 </div>
             </div>
 
             <div class="step-item">
                 <div class="step-number">2</div>
                 <div class="step-content">
-                    <h4>Copia de la Plantilla Máster</h4>
-                    <p>Se le entrega un enlace especial de Google Sheets para que guarde una copia privada en su propio Google Drive.</p>
+                    <h4>Completa tu catálogo y datos</h4>
+                    <p>Ingresa el nombre de tu local, número de WhatsApp y agrega tus productos con precios e imágenes dentro de la hoja copiada.</p>
                 </div>
             </div>
 
             <div class="step-item">
                 <div class="step-number">3</div>
                 <div class="step-content">
-                    <h4>Publicación de la hoja</h4>
-                    <p>En su plantilla, el cliente va a <em>Archivo > Compartir > Publicar en la web</em> para permitir que el sistema lea los productos.</p>
+                    <h4>Publica la hoja en la web</h4>
+                    <p>Dentro de tu hoja en Google Sheets, ve a <strong>Archivo > Compartir > Publicar en la web</strong> y presiona <strong>Publicar</strong>.</p>
                 </div>
             </div>
 
             <div class="step-item">
                 <div class="step-number">4</div>
                 <div class="step-content">
-                    <h4>Generación del enlace de su tienda</h4>
-                    <p>Ingresa el ID de su Google Sheet en la plataforma para activar su URL personalizada.</p>
+                    <h4>Copia y pega el enlace aquí</h4>
+                    <p>Copia el enlace de tu Google Sheet (o el ID) y pégalo en el generador de abajo para obtener tu URL personalizada.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h4>Prueba tu menú y activa tu licencia</h4>
+                    <p>Abre la URL generada para revisar tu tienda. Cuando estés listo, suscríbete para mantener la toma de pedidos activa.</p>
                 </div>
             </div>
         </div>
 
         <!-- GENERADOR EN LA PÁGINA -->
         <div class="generator-box">
-            <h3>Generador de tienda activa</h3>
-            <p>Si ya tienes tu suscripción y tu ID de Google Sheet, pégalo aquí para obtener la URL de tu negocio:</p>
+            <h3>Generar tienda de Pedidify</h3>
+            <p>Pega el enlace publicado o el ID de tu Google Sheet aquí:</p>
             
             <div class="input-group">
-                <input type="text" id="sheetId" class="input-field" placeholder="Pega el ID de tu Google Sheet aquí...">
-                <button class="btn-green" onclick="generarLink()">Generar Tienda</button>
+                <input type="text" id="sheetId" class="input-field" placeholder="Pega tu enlace de Google Sheet o ID aquí...">
+                <button class="btn-green" onclick="generarLink()">Obtener mi enlace</button>
             </div>
 
             <div id="result" class="result-box">
-                <span>Tu tienda está lista en: </span>
+                <span>Tu tienda está lista en: </span><br>
                 <a id="storeUrl" href="#" target="_blank"></a>
             </div>
         </div>
@@ -544,12 +574,21 @@
 
     <script>
         function generarLink() {
-            const id = document.getElementById('sheetId').value.trim();
-            if(!id) {
-                alert('Por favor ingresa un ID válido.');
+            const rawInput = document.getElementById('sheetId').value.trim();
+            if(!rawInput) {
+                alert('Por favor ingresa tu enlace de Google Sheet o el ID.');
                 return;
             }
-            const finalUrl = `https://pedidify.vercel.app/?id=${id}`;
+
+            let sheetId = rawInput;
+
+            // Extraer ID si el usuario pega la URL completa de Google Sheet
+            const matches = rawInput.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (matches && matches[1]) {
+                sheetId = matches[1];
+            }
+
+            const finalUrl = `https://pedidify.vercel.app/?id=${sheetId}`;
             const resultBox = document.getElementById('result');
             const storeUrl = document.getElementById('storeUrl');
 
